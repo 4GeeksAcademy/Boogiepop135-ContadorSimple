@@ -1,28 +1,33 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import SecondsCounter from "../components/SecondsCounter";
 
-//include images into your bundle
-import rigoImage from "../../img/rigo-baby.jpg";
-
-//create your first component
 const Home = () => {
-	return (
-		<div className="text-center">
-            
+    const [seconds, setSeconds] = useState(0);
+    const [isRunning, setIsRunning] = useState(true);
 
-			<h1 className="text-center mt-5">Hello Rigo!</h1>
-			<p>
-				<img src={rigoImage} />
-			</p>
-			<a href="#" className="btn btn-success">
-				If you see this green button... bootstrap is working...
-			</a>
-			<p>
-				Made by{" "}
-				<a href="http://www.4geeksacademy.com">4Geeks Academy</a>, with
-				love!
-			</p>
-		</div>
-	);
+    useEffect(() => {
+        if (!isRunning) return;
+        
+        const interval = setInterval(() => {
+            setSeconds(prev => prev + 1);
+        }, 1000);
+
+        return () => clearInterval(interval);
+    }, [isRunning]);
+
+    return (
+        <div className="container text-center mt-5">
+            <SecondsCounter seconds={seconds} />
+            <div className="mt-3">
+                <button className="btn btn-warning me-2" onClick={() => setIsRunning(!isRunning)}>
+                    {isRunning ? "Pausar" : "Reanudar"}
+                </button>
+                <button className="btn btn-danger" onClick={() => { setSeconds(0); setIsRunning(true); }}>
+                    Reiniciar
+                </button>
+            </div>
+        </div>
+    );
 };
 
 export default Home;
